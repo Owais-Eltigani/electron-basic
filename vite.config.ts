@@ -4,8 +4,16 @@ import react from '@vitejs/plugin-react';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-
+  base: './',
   build: {
-    outDir: 'dist-electron',
+    outDir: './dist-electron',
+    // assetsDir: './assets',
+    // rollupOptions: {
+    //   output: {
+    //     entryFileNames: './[name].js',
+    //     chunkFileNames: './[name].js',
+    //     assetFileNames: './[name].[ext]',
+    //   },
+    // },
   },
 });

@@ -1,0 +1,18 @@
+{
+  "appId": "com.example.basic-electron",
+  "productName": "Basic Electron",
+  "files": ["dist-electron/**/*"],
+  "icon": "./vite.svg",
+  "mac": {
+    "category": "public.app-category.utilities",
+
+    "target": ["dmg", "zip"]
+  },
+  "win": {
+    "target": ["portable", "nsis", "msi"]
+  },
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "category": "Utility"
+  }
+}
