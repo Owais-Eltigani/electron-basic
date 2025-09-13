@@ -18,8 +18,19 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    //* tailwindcss config */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    "skipLibCheck": true,
+    "noEmitOnError": false
+
+    //
   },
-  "include": ["src", "electron"],
+  "include": ["src", "electron", "components/components"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

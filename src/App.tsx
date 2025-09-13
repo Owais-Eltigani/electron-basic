@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { SessionForm } from '@/components/session-form';
-import { QRCodeDisplay } from '@/components/qr-code-display';
+import { SessionForm } from './components/session-form';
+import { QRCodeDisplay } from './components/qr-code-display';
 import { GraduationCap } from 'lucide-react';
 
 export default function StudentAttendanceApp() {
@@ -58,15 +58,18 @@ export default function StudentAttendanceApp() {
         </div>
 
         {/* Right Side - QR Code Display */}
-        <div className="w-80">
+        <div className="w-90">
           <QRCodeDisplay qrCodeData={qrCodeData} />
         </div>
       </div>
 
       {/* Bottom - Attendance Table */}
-      {showAttendance && (
+      {'showAttendance' && (
         <div className="bg-white border border-gray-200 rounded-lg h-96 shadow-sm">
           {/* Empty white box for future content */}
+          <h1 className="text-lg font-semibold p-4 text-center text-gray-500">
+            Students Names, Enr no. in Tabular Format
+          </h1>
         </div>
       )}
     </div>

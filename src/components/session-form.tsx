@@ -55,7 +55,7 @@ export function SessionForm({
           </Label>
           <Input
             id="subject"
-            placeholder="Enter subject name"
+            placeholder="Enter Course id/name"
             value={sessionData.subjectName}
             onChange={e => handleInputChange('subjectName', e.target.value)}
             className="w-full"

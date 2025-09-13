@@ -10,7 +10,7 @@ interface QRCodeDisplayProps {
 
 export function QRCodeDisplay({ qrCodeData }: QRCodeDisplayProps) {
   return (
-    <Card className="h-fit">
+    <Card className="">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <QrCode className="h-5 w-5 text-primary" />

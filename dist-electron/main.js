@@ -13,8 +13,13 @@ let win;
 function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    height: 1100,
+    width: 1100,
+    resizable: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs")
+      // Use plugin 'vite-electron-plugin' to enable nodeIntegration
+      // More info:
     }
   });
   win.webContents.on("did-finish-load", () => {
