@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { SessionForm } from './components/session-form';
 import { QRCodeDisplay } from './components/qr-code-display';
 import { GraduationCap } from 'lucide-react';
+import { Button } from './components/ui/button';
 
 export default function StudentAttendanceApp() {
   const [sessionData, setSessionData] = useState({
@@ -72,6 +73,10 @@ export default function StudentAttendanceApp() {
           </h1>
         </div>
       )}
+      <div className="flex flex-row justify-end mt-4 space-x-2  p-2">
+        <Button>Export as Excel</Button>
+        <Button>Export as CSV</Button>
+      </div>
     </div>
   );
 }
