@@ -1,5 +1,5 @@
 import osUtils from "os-utils";
-import fs, { stat } from "fs";
+import fs from "fs";
 
 //
 const POLLING_RATE = 500;
@@ -12,6 +12,8 @@ export const pollingResources = () => {
     const ramMatrix = ramUsage();
     const cpuMatrix = await getCPUsage();
     const diskMatrix = diskUsage();
+
+    //
     console.log({ ramMatrix, cpuMatrix, diskMatrix });
   }, POLLING_RATE);
 };
