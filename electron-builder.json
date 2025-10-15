@@ -1,0 +1,14 @@
+{
+    "appId": "com.dexter.attendenceapp",
+    "files": ["dist-react", "dist-electron"],
+    "mac":{
+        "target": "dmg"
+    },
+    "linux" : {
+        "target":"AppImage",
+        "category":"utility"
+    },
+    "win": {
+        "target": ["portable", "msi"]
+    }
+}
