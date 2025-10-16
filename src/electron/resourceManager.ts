@@ -1,21 +1,46 @@
 import osUtils from "os-utils";
 import fs from "fs";
+import os from "os";
+import { BrowserWindow } from "electron";
 
 //
 const POLLING_RATE = 500;
-export const pollingResources = () => {
+
+//? add the main window here as listener
+export const pollingResources = (mainWindow: BrowserWindow) => {
   // pull resources every 500 sec.
+
+  const deviceInfo = getStaticInfo();
   setInterval(async () => {
-    console.log("pulling machine matrices ... ");
+    console.log("pulling machine matrices ... \n");
 
     //
     const ramMatrix = ramUsage();
     const cpuMatrix = await getCPUsage();
     const diskMatrix = diskUsage();
 
-    //
-    console.log({ ramMatrix, cpuMatrix, diskMatrix });
+    console.log({ deviceInfo, ramMatrix, cpuMatrix, diskMatrix });
+
+    //? data sent to frontend.
+    mainWindow.webContents.send("statistics", {
+      deviceInfo,
+      ramMatrix,
+      cpuMatrix,
+      diskMatrix,
+    });
   }, POLLING_RATE);
+};
+
+const getStaticInfo = () => {
+  const { total } = diskUsage();
+  const cpuModel = os.cpus()[0].model;
+  const clockSpeed = os.cpus()[0].speed;
+
+  return {
+    total,
+    cpuModel,
+    clockSpeed,
+  };
 };
 
 const getCPUsage = () => {
