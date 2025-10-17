@@ -1,13 +1,14 @@
 import { useMemo } from "react";
 import { BaseChart } from "./BaseCharts";
+import type { View } from "../../types";
 
 export type ChartProps = {
   data: number[];
   maxDataPoints: number;
-  selectedView: "CPU" | "RAM" | "STORAGE";
+  selectedView: View;
 };
 
-const COLOR_MAP = {
+const COLOR_MAP: Record<View, { stroke: string; fill: string }> = {
   CPU: {
     stroke: "#5DD4EE",
     fill: "#0A4D5C",

@@ -17,7 +17,7 @@ export type FrameWindowAction = "CLOSE" | "MAXIMIZE" | "MINIMIZE";
 export type EventPayloadMapping = {
   statistics: Statistics;
   deviceInfo: deviceInfo;
-  getStaticInfo: Statistics;
+  getStaticInfo: deviceInfo;
   changeView: View;
   sendFrameAction: FrameWindowAction;
 };
@@ -27,12 +27,12 @@ type UnsubscribeFunction = () => void;
 interface Window {
   electron: {
     subscriberStatistics: (
-      callback: (stats: stats) => void
+      callback: (stats: Statistics) => void
     ) => UnsubscribeFunction;
-    getStaticInfo: () => Promise<Statistics>;
+    getStaticInfo: () => Promise<deviceInfo>;
     subscribeChangeView: (
       callback: (view: View) => void
     ) => UnsubscribeFunction;
-    // sendFrameAction: (payload: FrameWindowAction) => void;
+    sendFrameAction: (payload: FrameWindowAction) => void;
   };
 }

@@ -1,13 +1,20 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 // Import types
-import type { EventPayloadMapping, Statistics, View } from "../../types.js";
+import type {
+  EventPayloadMapping,
+  Statistics,
+  View,
+  FrameWindowAction,
+  deviceInfo,
+} from "../../types.js";
 
 // Define the electron API interface
 interface ElectronAPI {
   subscriberStatistics: (callback: (stats: Statistics) => void) => () => void;
   subscribeChangeView: (callback: (view: View) => void) => () => void;
-  getStaticInfo: () => Promise<Statistics>;
+  getStaticInfo: () => Promise<deviceInfo>;
+  sendFrameAction: (action: FrameWindowAction) => void;
 }
 
 //! only methods will be exposed to the UI from the host OS.
@@ -20,7 +27,9 @@ contextBridge.exposeInMainWorld("electron", {
     ipcOn("changeView", (view) => {
       callback(view);
     }),
-  getStaticInfo: () => ipcInvoke("getStaticInfo"),
+  getStaticInfo: () => ipcInvoke("deviceInfo"),
+  sendFrameAction: (action: FrameWindowAction) =>
+    ipcSend("sendFrameAction", action),
 } satisfies ElectronAPI);
 // });
 

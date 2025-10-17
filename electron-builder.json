@@ -1,5 +1,6 @@
 {
-  "appId": "com.dexter.attendenceapp",
+  "appId": "com.dexter.systemmonitor",
+  "productName": "System Monitor",
   "files": ["dist-react", "dist-electron"],
   "extraResources": ["/dist-electron/preload.cjs", "/src/ui/assets/**"],
   "mac": {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { Statistics } from "../../types";
 
 export function useStatistics(dataPointCount: number): Statistics[] {
   const [value, setValue] = useState<Statistics[]>([]);
