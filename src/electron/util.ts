@@ -25,7 +25,7 @@ export function getUIPath() {
 }
 
 export function getAssetPath() {
-  return path.join(app.getAppPath(), isDev() ? "." : "..", "/src/ui/assets");
+  return path.join(app.getAppPath(), isDev() ? "." : "..", "/src/ui/assets/");
 }
 
 export function ipcMainOn<Key extends keyof EventPayloadMapping>(
