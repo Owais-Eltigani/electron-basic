@@ -1,7 +1,9 @@
-import { BrowserWindow, app, ipcMain } from "electron";
+import { BrowserWindow, Tray, app } from "electron";
 import path from "path";
-import { isDev } from "./util.js";
-import { getStaticInfo, pollingResources } from "./resourceManager.js";
+import { getAssetPath, ipcHandler, isDev } from "./util.js";
+import { deviceInfo, pollingResources } from "./resourceManager.js";
+import { createMenu } from "./menu.js";
+import { createTray } from "./tray.js";
 
 // run when the app is ready
 app.on("ready", () => {
@@ -25,7 +27,16 @@ app.on("ready", () => {
   }
 
   pollingResources(mainWindow);
-  ipcMain.handle("getStaticInfo", () => {
-    return getStaticInfo();
+  createTray(mainWindow);
+
+  // new Tray(
+  //   path.join(
+  //     getAssetPath(),
+  //     process.platform === "darwin" ? "trayIcon.png" : "trayIconColored"
+  //   )
+  // );
+
+  ipcHandler("deviceInfo", () => {
+    return deviceInfo();
   });
 });

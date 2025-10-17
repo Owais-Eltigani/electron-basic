@@ -1,23 +1,28 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
+// Import types
+import type { EventPayloadMapping, Statistics, View } from "../../types.js";
+
+// Define the electron API interface
+interface ElectronAPI {
+  subscriberStatistics: (callback: (stats: Statistics) => void) => () => void;
+  subscribeChangeView: (callback: (view: View) => void) => () => void;
+  getStaticInfo: () => Promise<Statistics>;
+}
+
 //! only methods will be exposed to the UI from the host OS.
 contextBridge.exposeInMainWorld("electron", {
-  subscriberStatistics: (callback) => {
-    // the frontend process listening to backend on channel "statistics"
-    return ipcOn("statistics", (stats) => {
-      try {
-        callback(stats);
-      } catch (e) {
-        // swallow callback errors to avoid crashing the preload
-        console.error("Error in subscriberStatistics callback:", e);
-      }
-    });
-  },
-  getStaticInfo: () => {
-    // console.log("Host OS");
-    ipcInvoke("getStaticInfo");
-  },
-} satisfies Window["electron"]);
+  subscriberStatistics: (callback: (stats: Statistics) => void) =>
+    ipcOn("statistics", (stats) => {
+      callback(stats);
+    }),
+  subscribeChangeView: (callback: (view: View) => void) =>
+    ipcOn("changeView", (view) => {
+      callback(view);
+    }),
+  getStaticInfo: () => ipcInvoke("getStaticInfo"),
+} satisfies ElectronAPI);
+// });
 
 //* types
 function ipcInvoke<Key extends keyof EventPayloadMapping>(
@@ -30,7 +35,7 @@ function ipcOn<Key extends keyof EventPayloadMapping>(
   key: Key,
   callback: (payload: EventPayloadMapping[Key]) => void
 ) {
-  const cb = (_: Electron.IpcRendererEvent, payload: any) => callback(payload);
+  const cb = (_: any, payload: EventPayloadMapping[Key]) => callback(payload);
   ipcRenderer.on(key, cb);
   return () => ipcRenderer.off(key, cb);
 }

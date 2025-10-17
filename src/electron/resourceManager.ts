@@ -7,35 +7,33 @@ import { ipcWebContentSend } from "./util.js";
 //
 const POLLING_RATE = 500;
 
-//? add the main window here as listener
 export const pollingResources = (mainWindow: BrowserWindow) => {
   // pull resources every 500 sec.
 
-  const deviceInfo = getStaticInfo();
   setInterval(async () => {
     console.log("pulling machine matrices ... \n");
 
     //
-    const ramMatrix = ramUsage();
-    const cpuMatrix = await getCPUsage();
-    const diskMatrix = diskUsage();
+    const ramUsage = getRamUsage();
+    const cpuUsage = await getCPUsage();
+    const storageUsage = diskUsage();
 
-    console.log({ deviceInfo, ramMatrix, cpuMatrix, diskMatrix });
+    console.log({ cpuUsage, ramUsage, storageUsage });
 
     //? data sent to frontend.
     ipcWebContentSend(
       "statistics",
       {
-        storageUsage: diskMatrix,
-        cpuUsage: cpuMatrix,
-        ramUsage: ramMatrix,
+        cpuUsage,
+        ramUsage,
+        storageUsage,
       },
       mainWindow.webContents
     );
   }, POLLING_RATE);
 };
 
-export const getStaticInfo = () => {
+export const deviceInfo = () => {
   const total = diskUsage();
   const cpuModel = os.cpus()[0].model;
   const clockSpeed = os.cpus()[0].speed;
@@ -59,14 +57,13 @@ const getCPUsage = (): Promise<number> => {
   });
 };
 
-const ramUsage = () => {
+const getRamUsage = () => {
   return 1 - osUtils.freememPercentage();
 };
 
 const diskUsage = () => {
   const stats = fs.statfsSync(process.platform === "win32" ? "C://" : "/");
   const total = stats.bsize * stats.blocks;
-  const free = stats.bsize * stats.bfree;
 
   return Math.floor(total / 1_000_000_000);
   //   return {
@@ -74,8 +71,3 @@ const diskUsage = () => {
   //     usage: 1 - free / total,
   //   };
 };
-// const getCPUsage =()=>{
-//     return new Promise(resolve => {
-//         osUtils.cpuUsage(resolve)
-//     })
-// }

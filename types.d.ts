@@ -1,22 +1,23 @@
-type Statistics = {
+export type Statistics = {
   cpuUsage: number;
   ramUsage: number;
   storageUsage: number;
 };
 
-type getStaticInfo = {
-  totalStorage: number;
+export type deviceInfo = {
+  total: number;
   cpuModel: string;
-  totalMemoryGB: number;
+  clockSpeed: number;
 };
 
-type View = "CPU" | "RAM" | "STORAGE";
+export type View = "CPU" | "RAM" | "STORAGE";
 
-type FrameWindowAction = "CLOSE" | "MAXIMIZE" | "MINIMIZE";
+export type FrameWindowAction = "CLOSE" | "MAXIMIZE" | "MINIMIZE";
 
-type EventPayloadMapping = {
+export type EventPayloadMapping = {
   statistics: Statistics;
-  getStaticInfo: StaticData;
+  deviceInfo: deviceInfo;
+  getStaticInfo: Statistics;
   changeView: View;
   sendFrameAction: FrameWindowAction;
 };
@@ -28,10 +29,10 @@ interface Window {
     subscriberStatistics: (
       callback: (stats: stats) => void
     ) => UnsubscribeFunction;
-    getStaticData: () => Promise<StaticData>;
+    getStaticInfo: () => Promise<Statistics>;
     subscribeChangeView: (
       callback: (view: View) => void
     ) => UnsubscribeFunction;
-    sendFrameAction: (payload: FrameWindowAction) => void;
+    // sendFrameAction: (payload: FrameWindowAction) => void;
   };
 }

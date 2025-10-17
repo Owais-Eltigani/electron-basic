@@ -1,4 +1,6 @@
-import { ipcMain } from "electron";
+import { app, ipcMain, WebContents } from "electron";
+import type { EventPayloadMapping } from "../../types.js";
+import path from "path";
 
 export const isDev = () => {
   return process.env.NODE_ENV === "development";
@@ -12,8 +14,16 @@ export function ipcHandler<Key extends keyof EventPayloadMapping>(
 }
 export function ipcWebContentSend<Key extends keyof EventPayloadMapping>(
   key: Key,
-  payload: EventPayloadMapping,
-  webContents: webContents
+  payload: EventPayloadMapping[Key],
+  webContents: WebContents
 ) {
   webContents.send(key, payload);
+}
+
+export function getUIPath() {
+  return path.join(app.getAppPath(), "/dist-react/index.html");
+}
+
+export function getAssetPath() {
+  return path.join(app.getAppPath(), isDev() ? "." : "..", "/src/ui/assets");
 }
