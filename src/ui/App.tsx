@@ -6,9 +6,11 @@ function App() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    //@ts-expect-error
-    window.electron.subscriberStatistics((data) => console.log(data));
-    return () => {};
+    //
+    const unsub = window.electron.subscriberStatistics((data) =>
+      console.log(data)
+    );
+    return unsub;
   }, []);
 
   return (

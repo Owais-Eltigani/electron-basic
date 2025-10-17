@@ -2,18 +2,42 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 //! only methods will be exposed to the UI from the host OS.
 contextBridge.exposeInMainWorld("electron", {
-  subscriberStatistics: (callback: (stats: any) => void) => {
+  subscriberStatistics: (callback) => {
     // the frontend process listening to backend on channel "statistics"
-    ipcRenderer.on("statistics", (_event: any, data: any) => {
+    return ipcOn("statistics", (stats) => {
       try {
-        callback(data);
+        callback(stats);
       } catch (e) {
         // swallow callback errors to avoid crashing the preload
         console.error("Error in subscriberStatistics callback:", e);
       }
     });
   },
-  getStats: () => {
-    console.log("Host OS");
+  getStaticInfo: () => {
+    // console.log("Host OS");
+    ipcInvoke("getStaticInfo");
   },
-});
+} satisfies Window["electron"]);
+
+//* types
+function ipcInvoke<Key extends keyof EventPayloadMapping>(
+  key: Key
+): Promise<EventPayloadMapping[Key]> {
+  return ipcRenderer.invoke(key);
+}
+
+function ipcOn<Key extends keyof EventPayloadMapping>(
+  key: Key,
+  callback: (payload: EventPayloadMapping[Key]) => void
+) {
+  const cb = (_: Electron.IpcRendererEvent, payload: any) => callback(payload);
+  ipcRenderer.on(key, cb);
+  return () => ipcRenderer.off(key, cb);
+}
+
+function ipcSend<Key extends keyof EventPayloadMapping>(
+  key: Key,
+  payload: EventPayloadMapping[Key]
+) {
+  ipcRenderer.send(key, payload);
+}

@@ -2,6 +2,7 @@ import osUtils from "os-utils";
 import fs from "fs";
 import os from "os";
 import { BrowserWindow } from "electron";
+import { ipcWebContentSend } from "./util.js";
 
 //
 const POLLING_RATE = 500;
@@ -22,19 +23,28 @@ export const pollingResources = (mainWindow: BrowserWindow) => {
     console.log({ deviceInfo, ramMatrix, cpuMatrix, diskMatrix });
 
     //? data sent to frontend.
-    mainWindow.webContents.send("statistics", {
-      deviceInfo,
-      ramMatrix,
-      cpuMatrix,
-      diskMatrix,
-    });
+    ipcWebContentSend(
+      "statistics",
+      {
+        storageUsage: diskMatrix,
+        cpuUsage: cpuMatrix,
+        ramUsage: ramMatrix,
+      },
+      mainWindow.webContents
+    );
   }, POLLING_RATE);
 };
 
-const getStaticInfo = () => {
-  const { total } = diskUsage();
+export const getStaticInfo = () => {
+  const total = diskUsage();
   const cpuModel = os.cpus()[0].model;
   const clockSpeed = os.cpus()[0].speed;
+
+  console.log({
+    total,
+    cpuModel,
+    clockSpeed,
+  });
 
   return {
     total,
@@ -43,7 +53,7 @@ const getStaticInfo = () => {
   };
 };
 
-const getCPUsage = () => {
+const getCPUsage = (): Promise<number> => {
   return new Promise((resolve) => {
     osUtils.cpuUsage(resolve);
   });
@@ -58,10 +68,11 @@ const diskUsage = () => {
   const total = stats.bsize * stats.blocks;
   const free = stats.bsize * stats.bfree;
 
-  return {
-    total: Math.floor(total / 1_000_000_000),
-    usage: 1 - free / total,
-  };
+  return Math.floor(total / 1_000_000_000);
+  //   return {
+  //     total: Math.floor(total / 1_000_000_000),
+  //     usage: 1 - free / total,
+  //   };
 };
 // const getCPUsage =()=>{
 //     return new Promise(resolve => {
