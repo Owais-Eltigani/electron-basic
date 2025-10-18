@@ -1,16 +1,29 @@
 import { BrowserWindow, Menu, Tray, app } from "electron";
 import path from "path";
-import { getAssetPath } from "./util.js";
+import { isDev } from "./util.js";
 
 export function createTray(mainWindow: BrowserWindow) {
-  const tray = new Tray(
-    path.join(
-      getAssetPath(),
+  let trayIconPath: string;
+
+  if (isDev()) {
+    // Development mode - use original assets
+    trayIconPath = path.join(
+      app.getAppPath(),
+      "/src/ui/assets/",
       process.platform === "darwin"
         ? "Tray Icon Template.png"
         : "Tray Icon from Electron Course.png"
-    )
-  );
+    );
+  } else {
+    // Production mode - use build assets
+    trayIconPath = path.join(
+      app.getAppPath(),
+      "/build/",
+      process.platform === "darwin" ? "tray-template.png" : "tray-colored.png"
+    );
+  }
+
+  const tray = new Tray(trayIconPath);
 
   tray.setContextMenu(
     Menu.buildFromTemplate([
@@ -18,7 +31,7 @@ export function createTray(mainWindow: BrowserWindow) {
         label: "Show",
         click: () => {
           mainWindow.show();
-          if (app.dock) {
+          if (process.platform === "darwin" && app.dock) {
             app.dock.show();
           }
         },

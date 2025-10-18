@@ -1,16 +1,20 @@
 {
   "appId": "com.dexter.systemmonitor",
   "productName": "System Monitor",
-  "files": ["dist-react", "dist-electron"],
-  "extraResources": ["/dist-electron/preload.cjs", "/src/ui/assets/**"],
+  "icon": "build/desktop.png",
+  "files": ["dist-react", "dist-electron", "build"],
+  "extraResources": ["/dist-electron/preload.cjs"],
   "mac": {
-    "target": "dmg"
+    "target": "dmg",
+    "icon": "build/desktop.png"
   },
   "linux": {
     "target": "AppImage",
-    "category": "utility"
+    "category": "utility",
+    "icon": "build/desktop.png"
   },
   "win": {
-    "target": ["portable", "msi"]
+    "target": ["portable", "msi"],
+    "icon": "build/desktop.png"
   }
 }

@@ -1,0 +1,31 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <circle cx="256" cy="256" r="256" fill="#1a1a1a"/>
+  
+  <!-- Monitor Screen -->
+  <rect x="120" y="160" width="272" height="180" rx="16" fill="#2a2a2a" stroke="#5DD4EE" stroke-width="4"/>
+  
+  <!-- CPU Chart Line -->
+  <polyline points="140,280 170,250 200,270 230,240 260,260 290,230 320,250 350,220" 
+            fill="none" stroke="#5DD4EE" stroke-width="3"/>
+  
+  <!-- RAM Chart Line -->
+  <polyline points="140,300 170,290 200,285 230,275 260,285 290,270 320,275 350,265" 
+            fill="none" stroke="#E99311" stroke-width="3"/>
+  
+  <!-- Storage Chart Line -->
+  <polyline points="140,320 170,315 200,310 230,305 260,310 290,300 320,305 350,295" 
+            fill="none" stroke="#1ACF4D" stroke-width="3"/>
+  
+  <!-- Monitor Base -->
+  <rect x="220" y="340" width="72" height="20" rx="4" fill="#333"/>
+  <rect x="200" y="360" width="112" height="8" rx="4" fill="#333"/>
+  
+  <!-- Title Text -->
+  <text x="256" y="120" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="24" font-weight="bold">
+    SYSTEM
+  </text>
+  <text x="256" y="145" text-anchor="middle" fill="#5DD4EE" font-family="Arial, sans-serif" font-size="18">
+    MONITOR
+  </text>
+</svg>

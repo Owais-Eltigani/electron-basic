@@ -1,4 +1,5 @@
-import { app, ipcMain, WebContents } from "electron";
+import { app, ipcMain } from "electron";
+import type { WebContents } from "electron";
 import type { EventPayloadMapping } from "../../types.js";
 import path from "path";
 
@@ -25,14 +26,19 @@ export function getUIPath() {
 }
 
 export function getAssetPath() {
-  return path.join(app.getAppPath(), isDev() ? "." : "..", "/src/ui/assets/");
+  if (isDev()) {
+    return path.join(app.getAppPath(), "/src/ui/assets/");
+  } else {
+    // In production, assets are in extraResources
+    return path.join(process.resourcesPath, "/src/ui/assets/");
+  }
 }
 
 export function ipcMainOn<Key extends keyof EventPayloadMapping>(
   key: Key,
   handler: (payload: EventPayloadMapping[Key]) => void
 ) {
-  ipcMain.on(key, (event, payload) => {
+  ipcMain.on(key, (_, payload) => {
     return handler(payload);
   });
 }
